@@ -94,7 +94,7 @@ pickle_protocol = 0            # Protocol to use when writing pickle files
 
 # String type-checking compatibility
 if sys.version_info[0] < 3:
-    string_types = basestring
+    string_types = str
 else:
     string_types = str
 
@@ -312,7 +312,7 @@ class LRParser:
     # See:  http://www.gnu.org/software/bison/manual/html_node/Default-Reductions.html#Default-Reductions
     def set_defaulted_states(self):
         self.defaulted_states = {}
-        for state, actions in self.action.items():
+        for state, actions in list(self.action.items()):
             rules = list(actions.values())
             if len(rules) == 1 and rules[0] < 0:
                 self.defaulted_states[state] = rules[0]
@@ -1351,7 +1351,7 @@ class Production(object):
     def __len__(self):
         return len(self.prod)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return 1
 
     def __getitem__(self, index):
@@ -1691,7 +1691,7 @@ class Grammar(object):
         # Then propagate termination until no change:
         while True:
             some_change = False
-            for (n, pl) in self.Prodnames.items():
+            for (n, pl) in list(self.Prodnames.items()):
                 # Nonterminal n terminates iff any of its productions terminates.
                 for p in pl:
                     # Production p terminates iff all of its rhs symbols terminate.
@@ -1719,7 +1719,7 @@ class Grammar(object):
                 break
 
         infinite = []
-        for (s, term) in terminates.items():
+        for (s, term) in list(terminates.items()):
             if not term:
                 if s not in self.Prodnames and s not in self.Terminals and s != 'error':
                     # s is used-but-not-defined, and we've already warned of that,
@@ -1756,7 +1756,7 @@ class Grammar(object):
     # -----------------------------------------------------------------------------
     def unused_terminals(self):
         unused_tok = []
-        for s, v in self.Terminals.items():
+        for s, v in list(self.Terminals.items()):
             if s != 'error' and not v:
                 unused_tok.append(s)
 
@@ -1771,7 +1771,7 @@ class Grammar(object):
 
     def unused_rules(self):
         unused_prod = []
-        for s, v in self.Nonterminals.items():
+        for s, v in list(self.Nonterminals.items()):
             if not v:
                 p = self.Prodnames[s][0]
                 unused_prod.append(p)
@@ -2001,7 +2001,7 @@ class LRTable(object):
 
     def read_pickle(self, filename):
         try:
-            import cPickle as pickle
+            import pickle as pickle
         except ImportError:
             import pickle
 
@@ -2492,7 +2492,7 @@ class LRGeneratedTable(LRTable):
     # -----------------------------------------------------------------------------
 
     def add_lookaheads(self, lookbacks, followset):
-        for trans, lb in lookbacks.items():
+        for trans, lb in list(lookbacks.items()):
             # Loop over productions in lookback
             for state, p in lb:
                 if state not in p.lookaheads:
@@ -2753,8 +2753,8 @@ _lr_signature = %r
             if smaller:
                 items = {}
 
-                for s, nd in self.lr_action.items():
-                    for name, v in nd.items():
+                for s, nd in list(self.lr_action.items()):
+                    for name, v in list(nd.items()):
                         i = items.get(name)
                         if not i:
                             i = ([], [])
@@ -2763,7 +2763,7 @@ _lr_signature = %r
                         i[1].append(v)
 
                 f.write('\n_lr_action_items = {')
-                for k, v in items.items():
+                for k, v in list(items.items()):
                     f.write('%r:([' % k)
                     for i in v[0]:
                         f.write('%r,' % i)
@@ -2785,7 +2785,7 @@ del _lr_action_items
 
             else:
                 f.write('\n_lr_action = { ')
-                for k, v in self.lr_action.items():
+                for k, v in list(self.lr_action.items()):
                     f.write('(%r,%r):%r,' % (k[0], k[1], v))
                 f.write('}\n')
 
@@ -2793,8 +2793,8 @@ del _lr_action_items
                 # Factor out names to try and make smaller
                 items = {}
 
-                for s, nd in self.lr_goto.items():
-                    for name, v in nd.items():
+                for s, nd in list(self.lr_goto.items()):
+                    for name, v in list(nd.items()):
                         i = items.get(name)
                         if not i:
                             i = ([], [])
@@ -2803,7 +2803,7 @@ del _lr_action_items
                         i[1].append(v)
 
                 f.write('\n_lr_goto_items = {')
-                for k, v in items.items():
+                for k, v in list(items.items()):
                     f.write('%r:([' % k)
                     for i in v[0]:
                         f.write('%r,' % i)
@@ -2824,7 +2824,7 @@ del _lr_goto_items
 ''')
             else:
                 f.write('\n_lr_goto = { ')
-                for k, v in self.lr_goto.items():
+                for k, v in list(self.lr_goto.items()):
                     f.write('(%r,%r):%r,' % (k[0], k[1], v))
                 f.write('}\n')
 
@@ -2851,7 +2851,7 @@ del _lr_goto_items
 
     def pickle_table(self, filename, signature=''):
         try:
-            import cPickle as pickle
+            import pickle as pickle
         except ImportError:
             import pickle
         with open(filename, 'wb') as outf:
@@ -3130,7 +3130,7 @@ class ParserReflect(object):
     # Get all p_functions from the grammar
     def get_pfunctions(self):
         p_functions = []
-        for name, item in self.pdict.items():
+        for name, item in list(self.pdict.items()):
             if not name.startswith('p_') or name == 'p_error':
                 continue
             if isinstance(item, (types.FunctionType, types.MethodType)):
@@ -3193,7 +3193,7 @@ class ParserReflect(object):
         # Secondary validation step that looks for p_ definitions that are not functions
         # or functions that look like they might be grammar rules.
 
-        for n, v in self.pdict.items():
+        for n, v in list(self.pdict.items()):
             if n.startswith('p_') and isinstance(v, (types.FunctionType, types.MethodType)):
                 continue
             if n.startswith('t_'):

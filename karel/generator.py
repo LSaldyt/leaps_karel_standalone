@@ -1,7 +1,3 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import h5py
 import os
 import argparse
@@ -11,11 +7,11 @@ import pickle
 
 import numpy as np
 
-from dsl import get_DSL
-from dsl.dsl_parse_and_trace import parse_and_trace
-from util import log
+from .dsl import get_DSL
+from .dsl.dsl_parse_and_trace import parse_and_trace
+from .util import log
 
-import karel
+from . import karel
 
 
 class KarelStateGenerator(object):
@@ -33,7 +29,7 @@ class KarelStateGenerator(object):
 
         state_2d = state_2d.decode()
         for i in range(state_2d.shape[0]):
-            print("".join(state_2d[i]))
+            print(("".join(state_2d[i])))
 
     # generate an initial env
     def generate_single_state(self, h=8, w=8, wall_prob=0.1, env_task_metadata={}):
@@ -56,7 +52,7 @@ class KarelStateGenerator(object):
         s[:, :, 6] = (self.rng.rand(h, w) > 0.9) * (s[:, :, 4] == False) > 0
         s[:, :, 5] = 1 - (np.sum(s[:, :, 6:], axis=-1) > 0) > 0
         assert np.sum(s[:, :, 5:]) == h*w, np.sum(s[:, :, :5])
-        marker_weight = np.reshape(np.array(range(11)), (1, 1, 11))
+        marker_weight = np.reshape(np.array(list(range(11))), (1, 1, 11))
         return s, y, x, np.sum(s[:, :, 4]), np.sum(marker_weight*s[:, :, 5:])
 
     # generate an initial env for cleanHouse problem
@@ -418,7 +414,7 @@ def _branch_execution_ratio(record_dict):
 
     total_branches = 2 * len(record_dict)
     executed_branches = 0
-    for key, value in record_dict.items():
+    for key, value in list(record_dict.items()):
         branch_dict = value[0][1]
         executed_branches += int(branch_dict[True]) + int(branch_dict[False])
     return executed_branches / total_branches
@@ -521,8 +517,8 @@ def generator(config):
         if num_demo < config.num_demo_per_program:
             if config.cover_all_branches_in_demos and exec_ratio is not None and exec_ratio <= 1.0:
                 failed_exec_count += 1
-                print("exec_coverage_failure: {}/{} exec_cov:{} Only generated {}/{} demos with {}/{} env error trials for program: {}".format(
-                    failed_exec_count, count, exec_ratio, num_demo, config.num_demo_per_program, num_err_trial, num_trial, random_code))
+                print(("exec_coverage_failure: {}/{} exec_cov:{} Only generated {}/{} demos with {}/{} env error trials for program: {}".format(
+                    failed_exec_count, count, exec_ratio, num_demo, config.num_demo_per_program, num_err_trial, num_trial, random_code)))
             continue
 
         len_s_h = np.array([s_h.shape[0] for s_h in s_h_list], dtype=np.int16)

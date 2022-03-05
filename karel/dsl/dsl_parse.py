@@ -1,7 +1,7 @@
 import numpy as np
 from collections import defaultdict
 
-import dsl_data
+from . import dsl_data
 
 
 def check_and_apply(queue, rule):
@@ -155,7 +155,7 @@ def {}_r_cond_without_not_{}(t):
     return [('cond_without_not', fn)]
     '''
 
-    for token, api in dsl_data.obv_token_api_dict[env].items():
+    for token, api in list(dsl_data.obv_token_api_dict[env].items()):
         current_func_str = func_str.format(env.replace('-','_'), token, api)
         exec(current_func_str)
         fn = eval('{}_r_cond_without_not_{}'.format(env.replace('-','_'), token))

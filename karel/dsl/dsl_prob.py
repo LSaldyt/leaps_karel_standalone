@@ -6,8 +6,8 @@ Code is adapted from https://github.com/carpedm20/karel
 
 import numpy as np
 
-from dsl_base import DSLBase, MIN_INT, MAX_INT, INT_PREFIX
-from dsl_data import DSLData
+from .dsl_base import DSLBase, MIN_INT, MAX_INT, INT_PREFIX
+from .dsl_data import DSLData
 
 
 class DSLProb(DSLBase, DSLData):
@@ -243,7 +243,7 @@ class DSLProb(DSLBase, DSLData):
         candidates = self.prodnames[start_token]
         sample_prob = getattr(self, 'prob_{}'.format(start_token))
 
-        prod = candidates[self.rng.choice(range(len(candidates)), p=sample_prob)]
+        prod = candidates[self.rng.choice(list(range(len(candidates))), p=sample_prob)]
 
         for term in prod.prod:
             if term in self.prodnames:  # need digging

@@ -179,7 +179,7 @@ class PySyntaxChecker(object):
         self.act_acceptable = self.effect_acts | self.flow_lead | self.close_parens
         self.flow_needs_bool = set([T2I[flow_tkn] for flow_tkn in flow_need_bool])
         self.postcond_open_paren = set([T2I[op] for op in postcond_open_paren])
-        self.range_cste = set([idx for tkn, idx in T2I.items() if tkn.startswith("R=")])
+        self.range_cste = set([idx for tkn, idx in list(T2I.items()) if tkn.startswith("R=")])
         self.bool_checks = set([T2I[bcheck] for bcheck in bool_check])
 
         tt = torch.cuda if use_cuda else torch
@@ -373,7 +373,7 @@ if __name__ == '__main__':
         valid_tokens = torch.where(sequence_mask[idx] == 0)[0]
         valid_tokens = [I2T[tkn.detach().cpu().numpy().tolist()] for tkn in valid_tokens]
         valid_tokens = " ".join(valid_tokens)
-        print("valid tokens for {}: {}".format(I2T[token], valid_tokens))
+        print(("valid tokens for {}: {}".format(I2T[token], valid_tokens)))
 
 
 

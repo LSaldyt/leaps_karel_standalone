@@ -7,7 +7,7 @@ This repository contains a set of sparse-reward Karel environments---commonly us
 ## Environments
 
 ### Karel environment
-- You can find the codes for the Karel environments in [this directory](./karel_env)
+- You can find the codes for the Karel environments in [this directory](./karel)
 
 ## Getting Started
 

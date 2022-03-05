@@ -182,7 +182,7 @@ class Karel_world_supervised(object):
 
         state_2d = state_2d.decode()
         for i in range(state_2d.shape[0]):
-            print("".join(state_2d[i]))
+            print(("".join(state_2d[i])))
 
     def step(self, a):
         assert self.s.shape[0] == a.shape[0]
@@ -215,11 +215,11 @@ if __name__ == "__main__":
     a = 0 * np.ones(2560, dtype=np.int16)
     t = time.time()
     for i in range(116):
-        print("batch: ",i)
+        print(("batch: ",i))
         start = time.time()
         for j in range(1*1*100):
             s = world.step(a.reshape(2560))
-        print("Time for one batch: ", time.time()-start)
-    print("total time: {}", time.time()-t)
+        print(("Time for one batch: ", time.time()-start))
+    print(("total time: {}", time.time()-t))
 
 

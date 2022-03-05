@@ -286,7 +286,7 @@ class Karel_world(object):
 
         state_2d = state_2d.decode()
         for i in range(state_2d.shape[0]):
-            print("".join(state_2d[i]))
+            print(("".join(state_2d[i])))
 
     def render(self, mode='rgb_array'):
         return self.s_h[-1]
