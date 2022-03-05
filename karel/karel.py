@@ -3,7 +3,6 @@ import numpy as np
 import scipy
 from scipy import spatial
 
-
 MAX_NUM_MARKER = 10
 
 state_table = {

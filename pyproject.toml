@@ -6,10 +6,13 @@ authors = ["Dweep Trivedi", "Jesse Zhang", "Shao-Hua Sun"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.10"
 numpy = "^1.22.2"
 h5py = "^3.6.0"
 progressbar = "^2.5"
+ply = "^3.11"
+colorlog = "^6.6.0"
+scipy = "^1.8.0"
 
 [tool.poetry.dev-dependencies]
 

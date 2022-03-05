@@ -5,10 +5,12 @@ import time
 import numpy as np
 from multiprocessing import Pool
 
-import sys
-sys.path.insert(0, './')
-sys.path.insert(0, './karel_env')
-from karel_env import generator
+# Yikes
+# import sys
+# sys.path.insert(0, './')
+# sys.path.insert(0, './karel_env')
+from . import generator
+# from karel_env import generator
 
 MAX_NUM_MARKER = 10
 
